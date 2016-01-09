@@ -2,18 +2,14 @@
 class CellChannel < ApplicationCable::Channel
   def subscribed
     stream_from 'cell_channel'
-    result = { mass: 3, position: { x: 5, y: 6 } }
-    ActionCable.server.broadcast 'cell_channel', message: result
+    current_user.move(current_user.position)
   end
 
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
   end
 
-  def move(data)
-    message = data['message'] || {}
-
-    result = message
-    ActionCable.server.broadcast 'cell_channel', message: result
+  def move(position)
+    current_user.move(position)
   end
 end
